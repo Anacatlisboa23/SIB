@@ -1,4 +1,5 @@
-#exercicio 2 aula 1
+#exercicio 2 | aula 1
+#2.1
 import numpy as np
 
 class Dataset:
@@ -7,26 +8,52 @@ class Dataset:
         self.y = y
 
     def dropna(self):
-        # Find rows with NaN values in the feature matrix X
-        nan_rows = np.isnan(self.X).any(axis=1)
+        nan_mask = np.isnan(self.X).any(axis=1)
+        self.X = self.X[~nan_mask]
+        self.y = self.y[~nan_mask]
 
-        # Remove rows with NaN values from the feature matrix X and update y accordingly
-        self.X = self.X[~nan_rows]
-        self.y = self.y[~nan_rows]
+    def fillna(self, value):
+        if value == "mean":
+            fill_values = np.nanmean(self.X, axis=0)
+        elif value == "median":
+            fill_values = np.nanmedian(self.X, axis=0)
+        else:
+            fill_values = value
 
-        return self
+        for i in range(self.X.shape[1]):
+            nan_indices = np.isnan(self.X[:, i])
+            self.X[nan_indices, i] = fill_values[i]
 
-# Example usage:
-# Create a Dataset object
-X = np.array([[1.0, 2.0], [3.0, np.nan], [4.0, 5.0]])
+    def remove_by_index(self, index):
+        if index < 0 or index >= len(self.X):
+            raise ValueError("Invalid index")
+
+        self.X = np.delete(self.X, index, axis=0)
+        self.y = np.delete(self.y, index)
+
+
+# Criação de um dataset
+X = np.array([[1, 2, 3], [4, 5, 6], [7, np.nan, 9]])
 y = np.array([0, 1, 2])
 dataset = Dataset(X, y)
 
-# Use the dropna method to remove rows with NaN values
+# 2.1
 dataset.dropna()
-
-# Check the modified dataset
-print("Modified X:")
+print("After dropna:")
 print(dataset.X)
-print("Modified y:")
 print(dataset.y)
+
+# 2.2
+dataset = Dataset(X, y)  # Reset the dataset
+dataset.fillna("mean")
+print("After fillna with mean:")
+print(dataset.X)
+
+# 2.3
+dataset = Dataset(X, y)  # Reset the dataset
+index_to_remove = 1  # Index of the sample to remove
+dataset.remove_by_index(index_to_remove)
+print("After removing sample by index:")
+print(dataset.X)
+print(dataset.y)
+
