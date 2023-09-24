@@ -44,14 +44,14 @@ print(dataset.X)
 print(dataset.y)
 
 # 2.2
-dataset = Dataset(X, y)  # Reset the dataset
+dataset = Dataset(X, y)  
 dataset.fillna("mean")
 print("After fillna with mean:")
 print(dataset.X)
 
 # 2.3
-dataset = Dataset(X, y)  # Reset the dataset
-index_to_remove = 1  # Index of the sample to remove
+dataset = Dataset(X, y)  
+index_to_remove = 1  
 dataset.remove_by_index(index_to_remove)
 print("After removing sample by index:")
 print(dataset.X)
