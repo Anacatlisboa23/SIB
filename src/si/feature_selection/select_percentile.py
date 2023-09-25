@@ -34,7 +34,7 @@ class SelectPercentile:
 if __name__ == '__main__':
     from si.data.dataset import Dataset
 
-    df = pd.read_csv("C:\\Users\\catarina\\SIB\\datasets\\iris\\iris.csv")
+    df = pd.read_csv("C:\\Users\\catarina\\si\\datasets\\iris\\iris.csv")
     dataset = Dataset.from_dataframe(df, label='class')
     # dataset = Dataset(X=np.array([[0, 2, 0, 3],
     #                               [0, 1, 4, 3],

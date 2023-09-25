@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 
-ficheiro ='C:\\Users\\catarina\\SIB\\datasets\\iris\\iris.csv'
+ficheiro ='C:\\Users\\catarina\\si\\datasets\\iris\\iris.csv'
 df = pd.read_csv(ficheiro)
 print(df.head())
 
