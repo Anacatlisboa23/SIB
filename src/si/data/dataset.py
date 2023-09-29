@@ -127,6 +127,18 @@ class Dataset:
         return pd.DataFrame.from_dict(data, orient="index", columns=self.features)
 
     @classmethod
+    # exercicio 2
+    def dropna (self):
+        masc_na = np.logical_not(np.any(np.isnan(self.X), axis=1))
+        self.X = self.X[masc_na, :]
+        self.y = self.y[masc_na]
+
+    def fillna(self, valor):
+        self.X = np.nan_to_num(self.X, nan=valor)
+
+        
+
+    
     def from_dataframe(cls, df: pd.DataFrame, label: str = None):
         """
         Creates a Dataset object from a pandas DataFrame
