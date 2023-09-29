@@ -136,6 +136,23 @@ class Dataset:
     def fillna(self, valor):
         self.X = np.nan_to_num(self.X, nan=valor)
 
+    def remove_by_index(self, index: int):
+            """
+            Removes a sample by its index and updates the 'y' vector.
+
+            Parameters
+            ----------
+            index : int
+                The index of the sample to remove.
+            """
+            if index < 0 or index >= len(self.X):
+                raise ValueError("Invalid index")
+
+            self.X = np.delete(self.X, index, axis=0)
+
+            if self.y is not None:
+                
+                self.y = np.delete(self.y, index)
         
 
     
@@ -226,3 +243,8 @@ if __name__ == '__main__':
     print(dataset.get_min())
     print(dataset.get_max())
     print(dataset.summary())
+    dataset.dropna()
+    dataset.fillna(0)
+    dataset.remove_by_index(0)
+    print(dataset.X)
+    print(dataset.y)
