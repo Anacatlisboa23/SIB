@@ -126,7 +126,7 @@ class Dataset:
         }
         return pd.DataFrame.from_dict(data, orient="index", columns=self.features)
 
-    @classmethod
+    #@classmethod
     # exercicio 2
     def dropna (self):
         masc_na = np.logical_not(np.any(np.isnan(self.X), axis=1))
@@ -243,8 +243,14 @@ if __name__ == '__main__':
     print(dataset.get_min())
     print(dataset.get_max())
     print(dataset.summary())
+    
     dataset.dropna()
-    dataset.fillna(0)
+    dataset.fillna(1)
+    dataset.remove_by_index(1)
+    print("Antes de remover:", dataset.X)
     dataset.remove_by_index(0)
-    print(dataset.X)
-    print(dataset.y)
+    print("Depois de remover:", dataset.X)
+
+
+    df = dataset.to_dataframe()
+    
