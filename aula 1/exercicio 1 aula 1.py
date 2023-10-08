@@ -1,10 +1,19 @@
 # exercicios 1:
 
+#import sys
+#import os
 import numpy as np
 import pandas as pd
 
+# Obtenha o diretório pai do diretório atual (onde select_percentile.py está localizado).
+##parent_directory = os.path.dirname(current_directory)
 
-ficheiro ='C:\\Users\\catarina\\si\\datasets\\iris\\iris.csv'
+# Adicione o diretório raiz do projeto ao caminho de pesquisa do Python.
+#sys.path.append(parent_directory)
+
+
+#ficheiro ='C:\\Users\\catarina\\si\\datasets\\iris\\iris.csv' 
+ficheiro=ficheiro = r'C:\Users\anali\Documents\GitHub\si\datasets\iris\iris.csv' #pc novo
 df = pd.read_csv(ficheiro)
 print(df.head())
 

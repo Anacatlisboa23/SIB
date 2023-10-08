@@ -1,14 +1,16 @@
-from typing import Callable
 
+import sys
+import os
 import numpy as np
 import pandas as pd
+sys.path.append('C:\\Users\\anali\\Documents\\GitHub\\si\\src\\si')
 
 from si.data.dataset import Dataset
 from si.statistics.f_classification import f_classification
-
+from typing import Callable
 
 class SelectPercentile:
-    def __init__(self, score_func: Callable = f_classification, percentile: float = 0.5): # 0.5 porque queremos manter apenas metade
+    def __init__(self, score_func: Callable = f_classification, percentile: float = 0.5): # 0.5 porque queremos manter metade
         self.percentile = percentile
         self.score_func = score_func
         self.F = None
