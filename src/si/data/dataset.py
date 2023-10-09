@@ -129,11 +129,31 @@ class Dataset:
     #@classmethod
     # exercicio 2
     def dropna (self):
+        """
+        Remove rows with missing values (NaN) from the dataset.
+
+        This method removes rows from the dataset where any element in the feature matrix `X` is NaN.
+        It updates both the feature matrix `X` and the corresponding target vector `y`.
+
+        Returns:
+            None
+        """
         masc_na = np.logical_not(np.any(np.isnan(self.X), axis=1))
         self.X = self.X[masc_na, :]
         self.y = self.y[masc_na]
 
     def fillna(self, valor):
+        """
+        Fill missing values (NaN) in the dataset with a specified value.
+
+        This method replaces all NaN values in the feature matrix `X` with the specified `value`.
+
+        Args:
+            value: The value to use for filling NaN entries.
+
+        Returns:
+            None
+        """
         self.X = np.nan_to_num(self.X, nan=valor)
 
     def remove_by_index(self, index: int):

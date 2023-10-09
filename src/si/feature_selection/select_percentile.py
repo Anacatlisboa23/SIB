@@ -10,18 +10,46 @@ from si.statistics.f_classification import f_classification
 from typing import Callable
 
 class SelectPercentile:
+    
     def __init__(self, score_func: Callable = f_classification, percentile: float = 0.5): # 0.5 porque queremos manter metade
+        """
+        Initializes the SelectPercentile class.
+
+        Args:
+            score_func (Callable): The scoring function to be used for feature selection. It should be a function that accepts a Dataset object and returns two lists,
+            one with scores for each feature and another with p-values.
+            percentile (float): The percentile of features to be retained after selection.
+        """
         self.percentile = percentile
         self.score_func = score_func
         self.F = None
         self.p = None
 
     def fit(self, dataset: Dataset) -> 'SelectPercentile':
+        """
+        Fits the SelectPercentile instance to the training data.
+
+        Args:
+            dataset (Dataset): The training dataset.
+
+        Returns:
+            SelectPercentile: The fitted SelectPercentile instance.
+        """
 
         self.F, self.p = self.score_func(dataset)
         return self
 
     def transform(self, dataset: Dataset) -> Dataset:
+        """
+        Transforms the dataset according to the feature selection.
+
+        Args:
+            dataset (Dataset): The dataset to be transformed.
+
+        Returns:
+            Dataset: A new dataset containing only the selected features.
+        """
+
         num_total = len(list(dataset.features))
         num_a_manter = int(num_total * self.percentile)
         idxs = np.argsort(self.F)[-num_a_manter:]
@@ -29,6 +57,15 @@ class SelectPercentile:
         return Dataset(X=dataset.X[:, idxs], y=dataset.y, features=list(features), label=dataset.label)
 
     def fit_transform(self, dataset: Dataset) -> Dataset:
+        """
+        Fits the SelectPercentile instance to the training data and then transforms the dataset.
+
+        Args:
+            dataset (Dataset): The training dataset.
+
+        Returns:
+            Dataset: A new dataset containing only the selected features.
+        """
         self.fit(dataset)
         return self.transform(dataset)
 
