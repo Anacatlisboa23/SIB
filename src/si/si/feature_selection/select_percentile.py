@@ -3,7 +3,7 @@ import sys
 import os
 import numpy as np
 import pandas as pd
-sys.path.append('C:\\Users\\anali\\Documents\\GitHub\\si\\src\\si')
+#sys.path.append('C:\\Users\\anali\\Documents\\GitHub\\si\\src\\si')
 
 from si.data.dataset import Dataset
 from si.statistics.f_classification import f_classification
@@ -74,7 +74,7 @@ if __name__ == '__main__':
     from si.data.dataset import Dataset
 
     #df = pd.read_csv("C:\\Users\\catarina\\si\\datasets\\iris\\iris.csv")
-    df= pd.read_csv("C:\\Users\\anali\\Documents\\GitHub\\si\\datasets\\iris")
+    df= pd.read_csv("C:\\Users\\anali\\Documents\\GitHub\\si\\src\\si")
     dataset = Dataset.from_dataframe(df, label='class')
     # dataset = Dataset(X=np.array([[0, 2, 0, 3],
     #                               [0, 1, 4, 3],
