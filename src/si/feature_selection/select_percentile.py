@@ -1,23 +1,16 @@
-
-import sys
-import os
 import numpy as np
-import pandas as pd
-#sys.path.append('C:\\Users\\anali\\Documents\\GitHub\\si\\src\\si')
-
+from typing import Callable
 from si.data.dataset import Dataset
 from si.statistics.f_classification import f_classification
-from typing import Callable
+
 
 class SelectPercentile:
-    
-    def __init__(self, score_func: Callable = f_classification, percentile: float = 0.5): # 0.5 porque queremos manter metade
+    def __init__(self, score_func: Callable = f_classification, percentile: float = 0.5):
         """
         Initializes the SelectPercentile class.
 
         Args:
-            score_func (Callable): The scoring function to be used for feature selection. It should be a function that accepts a Dataset object and returns two lists,
-            one with scores for each feature and another with p-values.
+            score_func (Callable): The scoring function to be used for feature selection.
             percentile (float): The percentile of features to be retained after selection.
         """
         self.percentile = percentile
@@ -35,7 +28,6 @@ class SelectPercentile:
         Returns:
             SelectPercentile: The fitted SelectPercentile instance.
         """
-
         self.F, self.p = self.score_func(dataset)
         return self
 
@@ -49,7 +41,6 @@ class SelectPercentile:
         Returns:
             Dataset: A new dataset containing only the selected features.
         """
-
         num_total = len(list(dataset.features))
         num_a_manter = int(num_total * self.percentile)
         idxs = np.argsort(self.F)[-num_a_manter:]
@@ -71,19 +62,25 @@ class SelectPercentile:
 
 
 if __name__ == '__main__':
-    from si.data.dataset import Dataset
+    import pandas as pd
+    import numpy as np
 
-    #df = pd.read_csv("C:\\Users\\catarina\\si\\datasets\\iris\\iris.csv")
-    df= pd.read_csv("C:\\Users\\anali\\Documents\\GitHub\\si\\src\\si")
-    dataset = Dataset.from_dataframe(df, label='class')
-    # dataset = Dataset(X=np.array([[0, 2, 0, 3],
-    #                               [0, 1, 4, 3],
-    #                               [0, 1, 1, 3]]),
-    #                   y=np.array([0, 1, 0]),
-    #                   features=["f1", "f2", "f3", "f4"],
-    #                   label="y")
+    # Load the dataset using pandas
+    df = pd.read_csv("C:/Users/anali/PycharmProjects/si/datasets/iris/iris.csv")
 
+    # Extract features and labels from the DataFrame
+    X = df.drop(columns=["class"]).values
+    y = df["class"].values
+
+    # Create a Dataset object
+    dataset = Dataset(X=X, y=y, features=list(df.columns[:-1]), label='class')
+
+    # Create a SelectPercentile instance
     selector = SelectPercentile(percentile=0.5)
-    selector = selector.fit(dataset)
-    dataset = selector.transform(dataset)
-    print(dataset.features)
+
+    # Fit and transform the dataset
+    selected_dataset = selector.fit_transform(dataset)
+
+    # Display the selected features
+    print("Selected features:")
+    print(selected_dataset.features)
