@@ -41,3 +41,53 @@ def train_test_split(dataset: Dataset, test_size: float = 0.2, random_state: int
     train = Dataset(dataset.X[train_idxs], dataset.y[train_idxs], features=dataset.features, label=dataset.label)
     test = Dataset(dataset.X[test_idxs], dataset.y[test_idxs], features=dataset.features, label=dataset.label)
     return train, test
+
+def stratified_train_test_split(dataset: Dataset, test_size: float = 0.2, random_state: int = 42) -> Tuple[Dataset, Dataset]:
+    """
+    Stratified split of the dataset into training and testing sets.
+
+    Parameters
+    ----------
+    dataset: Dataset
+        The dataset to split.
+    test_size: float
+        The proportion of the dataset to include in the test split.
+    random_state: int
+        The seed for generating permutations.
+
+    Returns
+    -------
+    train: Dataset
+        The training dataset.
+    test: Dataset
+        The testing dataset.
+    """
+
+    np.random.seed(random_state)
+    unique_labels, label_counts = np.unique(dataset.y, return_counts=True)
+
+    train_indices = []
+    test_indices = []
+
+    for label in unique_labels:
+        num_test_samples = int(label_counts[label] * test_size) # Calculate the number of test samples for the current class
+        class_indices = np.where(dataset.y == label)[0] # Get indices
+
+        # Shuffle the indices
+        np.random.shuffle(class_indices)
+
+        # Add the appropriate number of indices to the test set
+        test_indices.extend(class_indices[:num_test_samples])
+
+        # Add the remaining indices to the train set
+        train_indices.extend(class_indices[num_test_samples:])
+
+    # Create training and testing datasets
+    train = Dataset(dataset.X[train_indices], dataset.y[train_indices], features=dataset.features, label=dataset.label)
+    test = Dataset(dataset.X[test_indices], dataset.y[test_indices], features=dataset.features, label=dataset.label)
+
+    return train, test
+
+
+
+
