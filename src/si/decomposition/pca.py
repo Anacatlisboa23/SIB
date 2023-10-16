@@ -6,6 +6,18 @@ from numpy.linalg import svd
 
 class PCA:
     def __init__(self, n_components: int):
+        """
+      Initialize a Principal Component Analysis (PCA) instance with a specified number of components.
+
+      Parameters:
+      n_components (int): The number of principal components to retain.
+
+      Attributes:
+      n_components (int): The number of principal components specified during initialization.
+      mean (np.ndarray): Mean of the dataset.
+      components (np.ndarray): Principal components of the dataset.
+      explained_variance (np.ndarray): Explained variance of the principal components.
+              """
         self.n_components = n_components
         self.mean = None
         self.components = None
@@ -14,9 +26,14 @@ class PCA:
 
     def _get_centered_data(self, dataset: Dataset) -> np.ndarray:
         """
-        This function centers the dataset.
-        param dataset: Dataset object.
-        return: A matrix with the centered data.
+        Center the dataset by subtracting the mean.
+
+        Parameters:
+        dataset (Dataset): The dataset to center.
+
+        Returns:
+        np.ndarray: A matrix with the centered data.
+
         """
 
         self.mean = np.mean(dataset.X, axis=0)  #axis= 0 column, mean of each column
@@ -26,9 +43,13 @@ class PCA:
 
     def _get_components(self, dataset: Dataset) -> np.ndarray:
         """
-    Calculates the components of the dataset.
-    param dataset:
-    return: A matrix with the components.
+        Calculate the principal components of the dataset.
+
+        Parameters:
+        dataset (Dataset): The dataset for which to compute principal components.
+
+        Returns:
+        np.ndarray: A matrix with the principal components.
         """
         centered_data = self._get_centered_data(dataset)
         self.u_matrix, self.s_matrix, self.v_matrix_t = np.linalg.svd(centered_data, full_matrices=False)
@@ -37,9 +58,13 @@ class PCA:
 
     def _get_explained_variance(self, dataset: Dataset) -> np.ndarray:
         """
-        Calculates the explained variance.
-        param dataset: Dataset object.
-        return: A vector with the explained variance.
+         Calculate the explained variance of the principal components.
+
+        Parameters:
+        dataset (Dataset): The dataset to compute explained variance for.
+
+        Returns:
+        np.ndarray: A vector with the explained variance.
         """
 
         ev = self.s_matrix ** 2 / (len(dataset.X) - 1)
@@ -48,8 +73,14 @@ class PCA:
 
     def fit(self, dataset: Dataset):
         """
-        Calculates the mean, the components and the explained variance.
-        return: Dataset.
+         Fit the PCA model to the provided dataset.
+
+        Parameters:
+        dataset (Dataset): The dataset to fit the PCA model to.
+
+        Returns:
+        PCA: The PCA instance with calculated components and explained variance.
+
         """
         if dataset.X is None or dataset.X.shape[0] == 0:
             raise ValueError("Input dataset is empty or has no valid shape.")
@@ -59,8 +90,14 @@ class PCA:
 
     def transform(self, dataset: Dataset) -> Dataset:
         """
-        Transforms the dataset.
-        return: Dataset object.
+        Transform the dataset using the fitted PCA model.
+
+        Parameters:
+        dataset (Dataset): The dataset to be transformed.
+
+        Returns:
+        Dataset: Transformed dataset based on the PCA model.
+
         """
         if self.components is None:
             raise Exception("You must fit the PCA before transform the dataset.")
@@ -70,8 +107,14 @@ class PCA:
 
     def fit_transform(self, dataset: Dataset) -> Dataset:
         """
-        The function calculates the mean, the components and the explained variance and transforms the dataset.
-        return: Dataset object.
+        Fit the PCA model to the provided dataset and then transform it.
+
+        Parameters:
+        dataset (Dataset): The dataset to be processed.
+
+        Returns:
+        Dataset: Transformed dataset based on the fitted PCA model.
+
         """
         self.fit(dataset)
         return self.transform(dataset)

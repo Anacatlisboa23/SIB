@@ -9,12 +9,16 @@ class KNNRegressor:
 
     def __init__(self, k: int = 1, distance: Callable = euclidean_distance):
         """
-        Initializes the KNN classifier
-        Parameters
-        k: int
-            The number of nearest neighbors to use
-        distance: Callable
-            The distance function to use
+        Initialize a K-Nearest Neighbors classifier.
+
+        Parameters:
+        k (int, optional): The number of neighbors to consider. Default is 1.
+        distance (Callable, optional): A function for calculating the distance between data points.
+        Default is the Euclidean distance function.
+
+        Attributes:
+        Dataset: The dataset used for training and prediction. Should be set using the `fit` method
+
         """
         # parameters
         self.k = k
@@ -25,30 +29,30 @@ class KNNRegressor:
 
     def fit(self, dataset: Dataset) -> 'KNNRegressor':
         """
-        Fits the model to the given dataset
-        Parameters:
+        Fit the K-Nearest Neighbors regressor with the provided dataset for future predictions.
 
-    dataset: Dataset
+        Parameters:
+        dataset (Dataset): The training dataset to fit the K-Nearest Neighbors regressor.
 
         Returns:
-
-        self: KNNClassifier
-            The fitted model
+        KNNRegressor: The fitted K-Nearest Neighbors regressor object.
         """
         self.dataset = dataset
         return self
 
     def _get_closest_label(self, sample: np.ndarray) -> Union[int, str]:
         """
-        It returns the closest label of the given sample
+        Get the label for a given sample based on the k-nearest neighbors.
+
         Parameters:
-        sample: np.ndarray
-            The sample to get the closest label of
+        sample (np.ndarray): The input data point for which to find the closest label.
+
         Returns:
-        label: str or int
-            The closest label
+        Union[int, str]: The predicted label for the input sample, which can be an integer (for regression)
+        or a string (for classification).
+
         """
-        # compute the distance between the sample and the dataset
+        # Distance between the sample and the dataset
         distances = self.distance(sample, self.dataset.X)
         # get the k nearest neighbors
         k_nearest_neighbors = np.argsort(distances)[:self.k]
@@ -60,7 +64,8 @@ class KNNRegressor:
 
     def predict(self, dataset: Dataset) -> np.ndarray:
         """
-        Predicts the classes of the given dataset
+        Predicts the classes of the given dataset.
+
         Parameters:
         dataset: Dataset
         Returns:
@@ -71,12 +76,13 @@ class KNNRegressor:
 
     def score(self, dataset: Dataset) -> float:
         """
+        Calculate the root mean squared error (RMSE) between the predictions and the actual labels on a given dataset.
 
         Parameters:
-        dataset: Dataset
+        dataset (Dataset): The dataset to evaluate the model's performance on.
 
         Returns:
-        accuracy: float
+        float: The root mean squared error (RMSE) as a measure of the model's performance. Lower RMSE values indicate better performance.
         """
         predictions = self.predict(dataset)
         return rmse(dataset.y, predictions)
