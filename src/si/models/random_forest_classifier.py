@@ -1,8 +1,10 @@
+from typing import Literal
+
 import numpy as np
-from si.models.decision_tree_classifier import DecisionTreeClassifier
+
 from si.data.dataset import Dataset
 from si.metrics.accuracy import accuracy
-from typing import Literal
+from si.models.decision_tree_classifier import DecisionTreeClassifier
 
 
 class RandomForestClassifier:
@@ -11,7 +13,8 @@ class RandomForestClassifier:
     and reduce overfitting
     """
 
-    def __init__(self, n_estimators=100, max_features=None, min_sample_split=2, max_depth=10, mode='gini', seed=None):
+    def __init__(self, n_estimators: int = 100, max_features: int = None, min_sample_split: int = 2,
+                 max_depth: int = 10, mode: Literal['gini', 'entropy'] = 'gini', seed: int = None):
         self.n_estimators = n_estimators
         self.max_features = max_features
         self.min_sample_split = min_sample_split
@@ -25,17 +28,17 @@ class RandomForestClassifier:
         Fits the random forest classifier to a dataset.
         Train the decision trees of the random forest.
 
-        Parameters
-        ----------
-        dataset: Dataset
-            The dataset to fit the model to.
+        Parameters:
+            dataset (Dataset): The dataset to fit the model to.
+        Returns:
+            RandomForestClassifier: The fitted model.
         """
         if self.seed is not None:
             np.random.seed(self.seed)
         n_samples, n_features = dataset.shape()
         if self.max_features is None:
             self.max_features = int(np.sqrt(n_features))
-        for _ in range(self.n_estimators):
+        for x in range(self.n_estimators):
             bootstrap_samples = np.random.choice(n_samples, n_samples, replace=True)
             bootstrap_features = np.random.choice(n_features, self.max_features, replace=False)
             random_dataset = Dataset(dataset.X[bootstrap_samples][:, bootstrap_features], dataset.y[bootstrap_samples])
@@ -54,20 +57,16 @@ class RandomForestClassifier:
         """
         Predicts the class labels for a dataset.
 
-        Parameters
-        ----------
-        dataset: Dataset
-            The dataset for which to make predictions.
+        Parameters:
+            dataset (Dataset): The dataset for which to make predictions.
 
-        Returns
-        -------
-        np.ndarray
-            An array of predicted class labels.
+        Returns:
+            np.ndarray: An array of predicted class labels.
         """
         n_samples = dataset.shape()[0]
         predictions = np.zeros((self.n_estimators, n_samples), dtype=object)
 
-        # for each tree
+        # for each tree in the random forest
         row = 0
         for features, tree in self.trees:
             tree_preds = tree.predict(dataset)
@@ -88,14 +87,10 @@ class RandomForestClassifier:
         Calculates the accuracy of the model on a dataset.
 
         Parameters
-        ----------
-        dataset: Dataset
-            The dataset to calculate the accuracy on.
+            dataset (Dataset): The dataset to calculate the accuracy on.
 
-        Returns
-        -------
-        float
-            The accuracy of the model on the dataset.
+        Returns:
+            float: The accuracy of the model on the dataset.
         """
         predictions = self.predict(dataset)
         return accuracy(dataset.y, predictions)
@@ -112,5 +107,4 @@ if __name__ == '__main__':
                                    seed=42)
     model.fit(train)
     print(model.score(test))
-
 

@@ -295,7 +295,10 @@ class Dropout(Layer):
         Returns:
         Union[tuple, None]: The shape of the output of the layer or None if the shape is not available.
         """
-        return self.input.shape
+        if self.input is not None:
+            return self.input.shape
+        else:
+            return None
 
     def parameters(self) -> int:
         """

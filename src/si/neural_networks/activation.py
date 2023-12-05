@@ -179,86 +179,86 @@ class ReLUActivation(ActivationLayer):
         """
         return np.where(input > 0, 1, 0)
 
-    class TanhActivation(ActivationLayer):
+class TanhActivation(ActivationLayer):
+    """
+    Tanh activation function.
+
+    The tanh activation applies the hyperbolic tangent function to squash values to the range of -1 to 1.
+    """
+
+    def activation_function(self, input: np.ndarray) -> np.ndarray:
         """
         Tanh activation function.
 
-        The tanh activation applies the hyperbolic tangent function to squash values to the range of -1 to 1.
+        Parameters
+        ----------
+        input: numpy.ndarray
+            The input to the layer.
+
+        Returns
+        -------
+        numpy.ndarray
+            The output of the layer.
         """
+        return np.tanh(input)
 
-        def activation_function(self, input: np.ndarray) -> np.ndarray:
-            """
-            Tanh activation function.
+    def derivative(self, input: np.ndarray) -> np.ndarray:
+        """
+        Derivative of the tanh activation function.
 
-            Parameters
-            ----------
-            input: numpy.ndarray
-                The input to the layer.
+        Parameters
+        ----------
+        input: numpy.ndarray
+            The input to the layer.
 
-            Returns
-            -------
-            numpy.ndarray
-                The output of the layer.
-            """
-            return np.tanh(input)
-
-        def derivative(self, input: np.ndarray) -> np.ndarray:
-            """
-            Derivative of the tanh activation function.
-
-            Parameters
-            ----------
-            input: numpy.ndarray
-                The input to the layer.
-
-            Returns
-            -------
-            numpy.ndarray
-                The derivative of the activation function.
-            """
-            return 1 - np.tanh(input) ** 2
+        Returns
+        -------
+        numpy.ndarray
+            The derivative of the activation function.
+        """
+        return 1 - np.tanh(input) ** 2
     #Exercise 13
-    class SoftmaxActivation(ActivationLayer):
+class SoftmaxActivation(ActivationLayer):
+    """
+    Softmax activation function.
+
+    The softmax activation transforms raw output scores into a probability distribution.
+    """
+
+    def activation_function(self, input: np.ndarray) -> np.ndarray:
         """
         Softmax activation function.
 
-        The softmax activation transforms raw output scores into a probability distribution.
+        Parameters
+        ----------
+        input: numpy.ndarray
+            The input to the layer.
+
+        Returns
+        -------
+        numpy.ndarray
+            The output of the layer.
         """
+        exp_values = np.exp(input - np.max(input, axis=1, keepdims=True))
+        return exp_values / np.sum(exp_values, axis=1, keepdims=True)
 
-        def activation_function(self, input: np.ndarray) -> np.ndarray:
-            """
-            Softmax activation function.
+    def derivative(self, input: np.ndarray) -> np.ndarray:
+        """
+        Derivative of the softmax activation function.
 
-            Parameters
-            ----------
-            input: numpy.ndarray
-                The input to the layer.
+        Parameters
+        ----------
+        input: numpy.ndarray
+            The input to the layer.
 
-            Returns
-            -------
-            numpy.ndarray
-                The output of the layer.
-            """
-            exp_values = np.exp(input - np.max(input, axis=1, keepdims=True))
-            return exp_values / np.sum(exp_values, axis=1, keepdims=True)
-
-        def derivative(self, input: np.ndarray) -> np.ndarray:
-            """
-            Derivative of the softmax activation function.
-
-            Parameters
-            ----------
-            input: numpy.ndarray
-                The input to the layer.
-
-            Returns
-            -------
-            numpy.ndarray
-                The derivative of the activation function.
-            """
-            # Note: The derivative of softmax is not explicitly used in backpropagation
-            # as it's typically computed during the cross-entropy loss computation.
-            return np.ones_like(input)
+        Returns
+        -------
+        numpy.ndarray
+            The derivative of the activation function.
+        """
+        # Note: The derivative of softmax is not explicitly used in backpropagation
+        # as it's typically computed during the cross-entropy loss computation.
+        return np.ones_like(input)
 
 
 
