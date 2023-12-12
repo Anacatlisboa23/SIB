@@ -41,12 +41,17 @@ class SelectPercentile:
         Returns:
             Dataset: A new dataset containing only the selected features.
         """
-        num_total = len(list(dataset.features))
-        num_a_manter = int(num_total * self.percentile)
-        idxs = np.argsort(self.F)[-num_a_manter:]
-        features = np.array(dataset.features)[idxs]
-        return Dataset(X=dataset.X[:, idxs], y=dataset.y, features=list(features), label=dataset.label)
 
+        # Calculate the total number of features in the dataset
+        num_total = len(list(dataset.features))
+        # Calculate the number of features to keep based on the specified percentile
+        num_a_manter = int(num_total * self.percentile)
+        # Get the indices of the features to keep, sorted by score values
+        idxs = np.argsort(self.F)[-num_a_manter:]
+        # Create a new array of features containing only the selected features
+        features = np.array(dataset.features)[idxs]
+        # Create a new dataset containing only the selected features
+        return Dataset(X=dataset.X[:, idxs], y=dataset.y, features=list(features), label=dataset.label)
     def fit_transform(self, dataset: Dataset) -> Dataset:
         """
         Fits the SelectPercentile instance to the training data and then transforms the dataset.
@@ -66,7 +71,7 @@ if __name__ == '__main__':
     import numpy as np
 
     # Load the dataset using pandas
-    df = pd.read_csv("C:/Users/anali/PycharmProjects/si/datasets/iris/iris.csv")
+    df = pd.read_csv(r"C:\Users\pc\PycharmProjects\si\datasets\iris\iris.csv")
 
     # Extract features and labels from the DataFrame
     X = df.drop(columns=["class"]).values
