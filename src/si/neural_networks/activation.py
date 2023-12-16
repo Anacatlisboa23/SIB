@@ -178,7 +178,7 @@ class ReLUActivation(ActivationLayer):
             The derivative of the activation function.
         """
         return np.where(input > 0, 1, 0)
-
+    # Exercise 13
 class TanhActivation(ActivationLayer):
     """
     Tanh activation function.
@@ -217,7 +217,7 @@ class TanhActivation(ActivationLayer):
             The derivative of the activation function.
         """
         return 1 - np.tanh(input) ** 2
-    #Exercise 13
+
 class SoftmaxActivation(ActivationLayer):
     """
     Softmax activation function.
